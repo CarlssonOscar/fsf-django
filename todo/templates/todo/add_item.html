@@ -11,6 +11,11 @@
 <body>
     <h1> Add a Todo Item:</h1>
     <form method="POST" action="add">
+        <!-- This token is a randomly generated unique value which will be added
+        to the form as a hidden input field when the forms submitted.
+        And works to guarantee that the data we're posting is actually coming 
+        from our todo list app and not from another website. -->
+        {% csrf_token %}
         <div>
             <p>
                 <!-- name går till views.py -->
