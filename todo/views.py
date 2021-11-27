@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Item
+# Observera att detta är en class från forms.py
+from .forms import ItemForm
 
 # Create your views here.
 # - Ensures ensure that we have access to it in our todo list .html
@@ -20,11 +22,14 @@ def get_todo_list(request):
 def add_item(request):
     # Add item form (POST request), observera att redirect behövde importeras (rad 1).
     if request.method == 'POST':
-        name = request.POST.get('item_name')
-        done = 'done' in request.POST 
-        # Observera att denna rad skapar ett nytt item.
-        Item.objects.create(name=name, done=done)
-        
-        return redirect('get_todo_list')
+        form = ItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('get_todo_list')
+    # Går nu att {{ form }} i html
+    form = ItemForm
+    context = {
+    'form': form
+    }
     # GET request.    
-    return render(request, 'todo/add_item.html')
+    return render(request, 'todo/add_item.html', context)
